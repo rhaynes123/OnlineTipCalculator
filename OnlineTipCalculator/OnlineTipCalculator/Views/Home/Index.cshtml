@@ -1,4 +1,8 @@
-﻿@{
+﻿@model OnlineTipCalculator.DTOs.CalculationRequest
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -6,3 +10,69 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<div id="alertDiv">
+
+</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UserId" value="@UserManager.GetUserId(User)" />
+        <div class="form-row">
+            <div class="form-group col-lg-6 col-md-12">
+                <label asp-for="BillAmount"></label>
+                <input asp-for="BillAmount" class="form-control" placeholder="ex. 12.65" />
+                <span asp-validation-for="BillAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group col-lg-6 col-md-12">
+                <label asp-for="TipType"></label>
+                <select asp-for="TipType" class="form-control" asp-items="Html.GetEnumSelectList<OnlineTipCalculator.Models.TipType>()">
+                    <option value="">Select A Type</option>
+                </select>
+                <span asp-validation-for="TipType" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+
+    <div class="text-center">
+        <div class="col-md-12">
+            <button class="btn btn-outline-success" type="button" onclick="SubmitCalculationRequest()">Submit</button>
+        </div>
+    </div>
+}
+
+<script>
+    function SubmitCalculationRequest() {
+        console.log("Request Created");
+        let billAmountValue = document.getElementById("BillAmount").value;
+        let tipTypeValue = document.getElementById("TipType").value;
+        let userIdValue = document.getElementById("UserId").value;
+
+        let jsonRequest = JSON.stringify({
+            billAmount: parseFloat(billAmountValue),
+            tipType: parseInt(tipTypeValue),
+            userId: userIdValue
+        });
+
+        fetch('https://localhost:5001/calculation/runCalculationAsync', {
+            method: 'post',
+            headers: { 'Content-type': 'application/json' },
+            body: jsonRequest
+        })
+            .then(response => {
+                console.log(response);
+                if (response.status !== 201) {
+                    alert("Saved Failed!");
+                    return;
+                }
+                console.log(response.json());
+                alert("Result Saved!");
+            
+        })
+            .catch(error => {
+            console.log(error);
+            alert("Error occurred Saved Failed!");
+        })
+    }
+</script>

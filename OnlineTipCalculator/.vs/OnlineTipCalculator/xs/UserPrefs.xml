@@ -1,12 +1,49 @@
 ﻿<Properties StartupConfiguration="{18EA6485-8E23-4CE5-B735-DB5FDE6E141D}|Default">
-  <MonoDevelop.Ide.ItemProperties.OnlineTipCalculator FirstBuild="True" PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.OnlineTipCalculator PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="OnlineTipCalculator/Views/Shared/_Layout.cshtml">
+    <Files>
+      <File FileName="OnlineTipCalculator/Controllers/CalculationController.cs" Line="70" Column="22" />
+      <File FileName="OnlineTipCalculator/DTOs/CalculationResponse.cs" Line="4" Column="35" />
+      <File FileName="OnlineTipCalculator/Views/Calculation/Index.cshtml" Line="37" Column="44" />
+      <File FileName="OnlineTipCalculator/Views/Home/Index.cshtml" Line="65" Column="47" />
+      <File FileName="OnlineTipCalculatorTest/CalculationControllerTests.cs" Line="62" Column="10" />
+      <File FileName="OnlineTipCalculator/Views/Shared/_Layout.cshtml" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Option id="ShowAllFiles" value="True" />
           <Node name="OnlineTipCalculator" expanded="True">
-            <Node name="OnlineTipCalculator" expanded="True" selected="True" />
+            <Node name="OnlineTipCalculator" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="DTOs" expanded="True" />
+              <Node name="Repositories" expanded="True" />
+              <Node name="Views" expanded="True">
+                <Node name="Calculation" expanded="True" />
+                <Node name="Home" expanded="True" />
+                <Node name="Shared" expanded="True">
+                  <Node name="_Layout.cshtml" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+            <Node name="OnlineTipCalculatorTest" expanded="True" />
+            <Node name="TipLibrary" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="OnlineTipCalculator" expanded="True" selected="True">
+            <Node name="OnlineTipCalculatorTest" expanded="True">
+              <Node name="OnlineTipCalculatorTest" expanded="True">
+                <Node name="CalculationControllerTests" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="TipLibraryTests" expanded="True">
+              <Node name="TipLibraryTests" expanded="True">
+                <Node name="TipLibTests" expanded="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>

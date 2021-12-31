@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.810.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineTipCalculator", "OnlineTipCalculator\OnlineTipCalculator.csproj", "{18EA6485-8E23-4CE5-B735-DB5FDE6E141D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineTipCalculatorTest", "OnlineTipCalculatorTest\OnlineTipCalculatorTest.csproj", "{38A97B8F-65D1-44AF-AF51-F5FEB9AA0825}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TipLibrary", "TipLibrary\TipLibrary.csproj", "{4F658FBB-9692-4FDB-969A-9808614D6D6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TipLibraryTests", "TipLibraryTests\TipLibraryTests.csproj", "{AF93B00B-B459-4CD2-A951-EA86D8DF32EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{18EA6485-8E23-4CE5-B735-DB5FDE6E141D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18EA6485-8E23-4CE5-B735-DB5FDE6E141D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18EA6485-8E23-4CE5-B735-DB5FDE6E141D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38A97B8F-65D1-44AF-AF51-F5FEB9AA0825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38A97B8F-65D1-44AF-AF51-F5FEB9AA0825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38A97B8F-65D1-44AF-AF51-F5FEB9AA0825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38A97B8F-65D1-44AF-AF51-F5FEB9AA0825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F658FBB-9692-4FDB-969A-9808614D6D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F658FBB-9692-4FDB-969A-9808614D6D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F658FBB-9692-4FDB-969A-9808614D6D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F658FBB-9692-4FDB-969A-9808614D6D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF93B00B-B459-4CD2-A951-EA86D8DF32EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF93B00B-B459-4CD2-A951-EA86D8DF32EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF93B00B-B459-4CD2-A951-EA86D8DF32EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF93B00B-B459-4CD2-A951-EA86D8DF32EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnlineTipCalculator.Models;
+using OnlineTipCalculator.DTOs;
+using OnlineTipCalculator.Repositories;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineTipCalculator.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
 
         public IActionResult Index()
         {
@@ -27,11 +26,12 @@ namespace OnlineTipCalculator.Controllers
         {
             return View();
         }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        
     }
 }

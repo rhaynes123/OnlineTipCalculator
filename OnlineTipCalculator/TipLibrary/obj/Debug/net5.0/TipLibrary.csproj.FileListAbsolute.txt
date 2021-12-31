@@ -1,0 +1,11 @@
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/bin/Debug/net5.0/TipLibrary.deps.json
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/bin/Debug/net5.0/TipLibrary.dll
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/bin/Debug/net5.0/ref/TipLibrary.dll
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/bin/Debug/net5.0/TipLibrary.pdb
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.AssemblyInfoInputs.cache
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.AssemblyInfo.cs
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.csproj.CoreCompileInputs.cache
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.dll
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/ref/TipLibrary.dll
+/Users/richardhaynes/Developer/RichQualityDevelopment/OnlineTipCalculator/OnlineTipCalculator/TipLibrary/obj/Debug/net5.0/TipLibrary.pdb

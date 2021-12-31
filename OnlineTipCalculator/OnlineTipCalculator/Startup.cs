@@ -12,6 +12,7 @@ using OnlineTipCalculator.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OnlineTipCalculator.Repositories;
 
 namespace OnlineTipCalculator
 {
@@ -27,6 +28,8 @@ namespace OnlineTipCalculator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataProtection();
+            services.AddScoped<ICalculationRepository, CalculationRepository>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -38,8 +41,9 @@ namespace OnlineTipCalculator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext db)
         {
+            db.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DTOs\" />
+    <None Remove="Repositories\" />
+    <None Remove="Microsoft.AspNetCore.DataProtection.Abstractions" />
+    <None Remove="Microsoft.AspNetCore.DataProtection" />
+    <None Remove="Microsoft.Extensions.Logging.Abstractions" />
+    <None Remove="Microsoft.VisualStudio.Web.CodeGeneration.Design" />
+    <None Remove="Views\Calculation\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
@@ -15,6 +24,20 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.Abstractions" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Views\Calculation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TipLibrary\TipLibrary.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
