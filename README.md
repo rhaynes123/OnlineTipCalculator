@@ -123,5 +123,12 @@ You can see that we are keeping this private function pretty simple for now. It 
   
 ### Step 5: Unit Tests
 Ok now here's when we're going to need a glass of our favorite adult beverage because its time for some unit tests! Let go ahead and create a new test project by right clicking on the solution folder and then adding our new project.
+  
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.02.21%20PM.png"> 
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.03.06%20PM.png"> 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.03.30%20PM.png"> 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.09.58%20PM.png"> 
+  
+  If everything worked correclty you should see something like this file below once the project has finished being made.
+  
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.11.21%20PM.png">
