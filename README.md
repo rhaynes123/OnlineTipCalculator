@@ -111,3 +111,17 @@ I've added a new argument of the Configure method which will be an instance of t
 The next step is a very simple one but we need to create a request object. We created a response object which will represent how the data will look when we return it from a model but we don't have one to represent what it will look like when we get a request. To achieve this we are going to create a record but using a different syntax also so that we can take advantage of something we didn't use in the response object. 
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.58.02%20PM.png">
 So as you can see I went ahead and used data annotations again for this record because I don't even want to process a request that violates the requirements. We are also using a new annotation called Display which will present a nicer string format for the property instead of the literal column name. This will come in handy when we get to the UI bits.
+
+### Step 4: Working With our Controllers.
+Just if your new to controllers, controllers are merely classes that get the job of acting as the middle man between any api request and the data being sent or returned from that request. For the sake of simplicity we are going to start using the default HomeController. Later we will modify this but for now this is a great way to start. So first thing to do is to add the code shown in the screenshot below.
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.59.16%20PM.png">
+  
+You can see that we are keeping this private function pretty simple for now. It takes advantage of the Math.Round function which we get out the box from the System library and it requires 2 things first a number and then a precision for the resulting rounded number. Next we are going to add some properties and a new function to our controller.
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.59.57%20PM.png"> 
+ 
+ As you can see we are taking advantage of CalculationRepository we made early and passing a brand new calculation instance into it. You will also see that we are returning both our calculate data and an ok sucessful status code of 200 with the OK object.
+  
+### Step 5: Unit Tests
+Ok now here's when we're going to need a glass of our favorite adult beverage because its time for some unit tests! Let go ahead and create a new test project by right clicking on the solution folder and then adding our new project.
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.02.21%20PM.png"> 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.03.06%20PM.png"> 
