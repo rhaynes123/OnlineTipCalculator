@@ -104,7 +104,8 @@ I've added a new argument of the Configure method which will be an instance of t
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%203.14.42%20PM.png">
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%203.26.53%20PM.png">
   
-  Ok here's were we going to stop for a bit and review what is happening, what we did and most importantly why. So we started by creating our interface but the interface only had one method which is for saving a calculation so it will take a model and return a task of boolean so that callers of this function can get information on if the save operation was a success or not. You can also see that the CalculationRepository class has 2 properties one for the db context and the other is it's logger. Logging is a very undervalued mechanism in many tutorials and lessons but honestly it's critical in production level applications. For security reasons for example you want to log all exceptions and only throw those you have ways to catch. Logging information is also critical for debugging and tracking down issues.
+  Ok here's were we going to stop for a bit and review what is happening, what we did and most importantly why. So we started by creating our interface but the interface only had one method which is for saving a calculation so it will take a model and return a task of boolean so that callers of this function can get information on if the save operation was a success or not. You can also see that the CalculationRepository class has 2 properties one for the db context and the other is it's logger. Logging is a very undervalued mechanism in many tutorials and lessons but honestly it's critical in production level applications. For security reasons for example you want to log all exceptions and only throw those you have ways to catch. Logging information is also critical for debugging and tracking down issues. Final step is to register the CalculationRepository repository we've created. This is done by opening our projects StartUp file and adding the line of code I've add on line 31 of this screenshot as all the using statement for the repositories folder.
+ <img src="OnlineTipCalculator/blob/main/OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.26.00%20PM.png">
   
 ### Step 3: Making a Request Object
 
@@ -132,3 +133,18 @@ Ok now here's when we're going to need a glass of our favorite adult beverage be
   If everything worked correclty you should see something like this file below once the project has finished being made.
   
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.11.21%20PM.png">
+  
+  Next we are going to add a nuget package that will allow us to mock data since we don't want to run test against any real data. We can add a nuget package by right clicking our project and
+  
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.53.13%20PM.png">
+  
+ In the browse section go ahead and select the Browse tab and look for Moq which is the name of nuget package library we need to install. Make sure you also accept the license agreement to use this library. 
+  
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.12.34%20PM.png">
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.54.07%20PM.png">
+  
+ Now that our unit test project has all the libraries it needs we need are going to add a reference to the main Tip Calculator project. We need to do this because code in different projects can never automatically communicate with one another so we need to add references to other projects in order for projects to access code outside it's own project. Let go ahead and click on the add option like we've done before but select Reference this time. 
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.55.18%20PM.png">
+  
+ After the references prompt shows up go ahead and make sure are OnlineTipCalculator project is checked off and then select Ok.
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.27.36%20PM.png">
