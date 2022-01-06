@@ -13,8 +13,8 @@ After the terminal prompt is open we are 1st going to make sure we are in the pr
 
 If your terminal window looks like the above screenshot then you are in the correct folder. If not you may need to change the project folder by typing cd OnlineTipCalculator.If you do the files in the screenshot above then type the command " dotnet user-secrets init " which will allow the project to know to reference the secret manager locally for any values we need referenced by our appsettings file.
 
-<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-26%20at%209.36.37%20PM.png">
-Next we want to add an entry for the data we want referenced. This can be done by typing "dotnet user-secrets set "<key>" "<value to save>" ".
+
+Next we want to add an entry for the data we want referenced. This can be done by typing "dotnet user-secrets set "ConnectionStrings:DefaultConnection" DataSource=app.db;Cached=Shared ".
   
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-26%20at%209.36.37%20PM.png">
   
@@ -108,7 +108,7 @@ I've added a new argument of the Configure method which will be an instance of t
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%203.26.53%20PM.png">
   
   Ok here's were we going to stop for a bit and review what is happening, what we did and most importantly why. So we started by creating our interface but the interface only had one method which is for saving a calculation so it will take a model and return a task of boolean so that callers of this function can get information on if the save operation was a success or not. You can also see that the CalculationRepository class has 2 properties one for the db context and the other is it's logger. Logging is a very undervalued mechanism in many tutorials and lessons but honestly it's critical in production level applications. For security reasons for example you want to log all exceptions and only throw those you have ways to catch. Logging information is also critical for debugging and tracking down issues. Final step is to register the CalculationRepository repository we've created. This is done by opening our projects StartUp file and adding the line of code I've add on line 31 of this screenshot as all the using statement for the repositories folder.
- <img src="OnlineTipCalculator/blob/main/OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.26.00%20PM.png">
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.26.00%20PM.png">
   
 ### Step 3: Making a Request Object
 
