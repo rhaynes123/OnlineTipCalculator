@@ -5,7 +5,7 @@ The goal of this tutorial is to attempt to walk programmers through the process 
 The IDE used in this tutorial was Visual Studio For Mac. For the sake of time we're going to avoid going into detail about how to create a project in VS For Mac but if you do need assistance here's a [link](https://docs.microsoft.com/en-us/visualstudio/mac/tutorial-aspnet-core-vsmac-getting-started?view=vsmac-2019) to Microsofts tutorials on making projects with VS For Mac. The one required step I will go over in creating the code is to ensure that you select the "Individual Authentication (in-app) of the Authentication section. <img src="OnlineTipCalculator/Images/Screen%20Shot%202022-01-04%20at%209.27.25%20PM.png"> Please note that while in this tutorial my IDE of choice was VS For Mac you are more than welcome to use a different IDE that you are comfortable with.
 
 ### Step 1
-Assuming that you are able to create a new ASP.Net Core (Verion 5.0 >) project lets find and review our appsettings.json file. In a real world environment one of the first tasks that needs to be taken care of is ensuring that sensitive information is not committed to a source control repository. Passwords and api keys should never be hard coded into our source code let a lone be committed. Once that is done it is almost impossible to correct that error without destroying the repo altogther. There are a number of technique and ways to solve this problem, the one we will be using in this article is the Secrets Manager provided by microsoft. We are going to use the secret manager to store the database connection string. In the examples the database used in this project was SQLite which required no password to access but if there was a password the process would be the exact same. We will need to get to a terminal prompt of the target project. This can be done in VSFor Mac by right clicking project and going to tools and selecting either Open in Terminal or Open In Terminal Window. I will be using the Terminal window in this article.
+Assuming that you are able to create a new ASP.Net Core (Verion 5.0 >) project lets find and review our appsettings.json file. In a real world environment one of the first tasks that needs to be taken care of is ensuring that sensitive information is not committed to a source control repository. Passwords and api keys should never be hard coded into our source code let a lone be committed. Once that is done it is almost impossible to correct that error without destroying the repo altogther. There are a number of technique and ways to solve this problem, the one we will be using in this article is the [Secrets Manager](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows) provided by microsoft. We are going to use the secret manager to store the database connection string. In the examples the database used in this project was SQLite which required no password to access but if there was a password the process would be the exact same. We will need to get to a terminal prompt of the target project. This can be done in VSFor Mac by right clicking project and going to tools and selecting either Open in Terminal or Open In Terminal Window. I will be using the Terminal window in this article.
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-26%20at%209.31.06%20PM%20(3).png">
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-26%20at%209.35.20%20PM.png">
 
@@ -108,19 +108,23 @@ I've added a new argument of the Configure method which will be an instance of t
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%203.26.53%20PM.png">
   
   Ok here's were we going to stop for a bit and review what is happening, what we did and most importantly why. So we started by creating our interface but the interface only had one method which is for saving a calculation so it will take a model and return a task of boolean so that callers of this function can get information on if the save operation was a success or not. You can also see that the CalculationRepository class has 2 properties one for the db context and the other is it's logger. Logging is a very undervalued mechanism in many tutorials and lessons but honestly it's critical in production level applications. For security reasons for example you want to log all exceptions and only throw those you have ways to catch. Logging information is also critical for debugging and tracking down issues. Final step is to register the CalculationRepository repository we've created. This is done by opening our projects StartUp file and adding the line of code I've add on line 31 of this screenshot as all the using statement for the repositories folder.
+  
  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.26.00%20PM.png">
   
 ### Step 3: Making a Request Object
 
 The next step is a very simple one but we need to create a request object. We created a response object which will represent how the data will look when we return it from a model but we don't have one to represent what it will look like when we get a request. To achieve this we are going to create a record but using a different syntax also so that we can take advantage of something we didn't use in the response object. 
+  
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.58.02%20PM.png">
 So as you can see I went ahead and used data annotations again for this record because I don't even want to process a request that violates the requirements. We are also using a new annotation called Display which will present a nicer string format for the property instead of the literal column name. This will come in handy when we get to the UI bits.
 
 ### Step 4: Working With our Controllers.
 Just if your new to controllers, controllers are merely classes that get the job of acting as the middle man between any api request and the data being sent or returned from that request. For the sake of simplicity we are going to start using the default HomeController. Later we will modify this but for now this is a great way to start. So first thing to do is to add the code shown in the screenshot below.
-  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.59.16%20PM.png">
+  
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.59.16%20PM.png">
   
 You can see that we are keeping this private function pretty simple for now. It takes advantage of the Math.Round function which we get out the box from the System library and it requires 2 things first a number and then a precision for the resulting rounded number. Next we are going to add some properties and a new function to our controller.
+  
  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%204.59.57%20PM.png"> 
  
  As you can see we are taking advantage of CalculationRepository we made early and passing a brand new calculation instance into it. You will also see that we are returning both our calculate data and an ok sucessful status code of 200 with the OK object.
@@ -133,7 +137,7 @@ Ok now here's when we're going to need a glass of our favorite adult beverage be
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.03.30%20PM.png"> 
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.09.58%20PM.png"> 
   
-  If everything worked correclty you should see something like this file below once the project has finished being made.
+  If everything worked correctly you should see something like this file below once the project has finished being made.
   
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.11.21%20PM.png">
   
@@ -147,7 +151,46 @@ Ok now here's when we're going to need a glass of our favorite adult beverage be
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.54.07%20PM.png">
   
  Now that our unit test project has all the libraries it needs we need are going to add a reference to the main Tip Calculator project. We need to do this because code in different projects can never automatically communicate with one another so we need to add references to other projects in order for projects to access code outside it's own project. Let go ahead and click on the add option like we've done before but select Reference this time. 
+  
 <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%205.55.18%20PM.png">
   
  After the references prompt shows up go ahead and make sure are OnlineTipCalculator project is checked off and then select Ok.
+  
  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.27.36%20PM.png">
+  
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.28.03%20PM.png">
+  
+  This is a section where we're going to slow down and review a lot of the code here. For anyone not used to mocking the term in plan english is merely a process that lets code designed to query a database not use real data but fake or "mock" data. If your new to any library that mocks data one of the core reasons we do this is because honestly its incredibly dangerous to mix test data into your production database. Even when you run your code against a developer or staging copy of your real database you could be polluting your test data in unexpected ways creating problems for yourself and others your not even aware of. You might be asking yourself "well how am I going to properly test my logic works if it doesn't touch my real database?" and that problem is solved with different categories of test called integration tests and even automation test. Those types of tests are meant to be used to mimic behavior between your code and real data. Thats a topic I won't get into much more for this guide but it's a worth while subject to research and understand. 
+  
+You can observe online 23 one of the main things the Moq library provides us which is the Setup functions. Here it's "setting up" an instance a copy of of the SaveCalcuation function from our repository with mocked data. The code on line 24 in the above screenshot is also a critical part of working with mocks because they don't have the actual data type of the thing they are mocking. Calling the Object property will expose an instance of the data type with the data we mocked. We are also setting that to a property just for the sake of simplicity.
+  
+ In the actual tests themselves we are then creating new instances of the Home Controller using our test repository and test logger. We then create a new instance of CalculationRequest and set it's properties with some random test data. Next we call the function this test is meant to target which in this case is RunCalculationAsync. Something to be aware of when working with endpoints that return an IActionResult is that they will often need to aliased to some concrete datatype that can inherit from that interface to get any relevant information we can test. In the 1st test I'm simply testing that the end point will return a 200 or OK status code when valid data is sent.  The test below it is very similar and build on a lot of what we did in the preceeding test but in this test we "casting" the value of the result as well and in this case we are vasting the result to a Calculation since that's the class we send in the response. For this test we are only checking to make sure that the result amount will be a number that we expect given our inputs.
+  
+ Now we get into the real reason this is the hardest section actually. Our requirements for our application are about to change! We get and emergency email from out stakeholders telling us that because of "article 53 of the United State Financial Regulartory Bureau and company that is responsible for any calculations of any sales done by a customer must not be shared and or exposed outside said company. This data must be treated as personaly identifiable information  no different than a social security number as malicious entities can use this data to sell to other parties the spending habit of US citizens"(I 100% made this up but I wouldn't be surprised if you ask a team mate with 5 or more years of experience they will have had to deal with some government rule that sounds like this). Long story short we need to encrypt our calculation results so hackers don't get them.
+
+This situation is the exact reason I feel it is very important to try to get your unit tests done very quickly in your development cycle. In the real word requirements change quickly and very very often. It's extremely unfair and there are many many processes in information technology to prevent this as much as possible but it is something that is not likely to even be truly avoided. Any customer or stakeholder of your application will have a very different mindset of what is reasonable to ask of you and how long things may take. Many of them aren't able to understand the difficulty and time it takes to achieve tasks others honestly simply do not care because they are in some way shape or form paying you for a service and even if they forget to tell you the full requirements they are often still part of the service. Sometimes you can push back on late requirements and fix them at more appropriate times but with something like governement and or security regulations you need to act quickly. Having test that we can run regularly on establish functionality means we are far less likely to break parts of our code we had working accidently in an effort to make adjustments to support new requirements. I personally like to view my software as a living being and every living being needs some type of immune system, some internal mechanism that can protect your inner workings against outside threats.Am I comparing requirement changes to viruses? Yes yes I am you work as long as I have you might too :) 
+  ### Step 6: Adding Encryption
+ 
+So next step in our guide, now that our requirements have changed will be to add the [DataProtection](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/using-data-protection?view=aspnetcore-5.0) nuget packages that will help us secure out data. Please note that security is an ever changing topic especially for software. There are many tools that exist to secure software you should always do research before implementing any technology for that person. Getting that out the way open the Nuget package manager and search for DataProtection. For this guide we will be using Microsoft.AspNetCore.DataProtection and Microsoft.AspNetCore.DataProtection.Abstractions.
+  
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.36.20%20PM.png">
+ 
+  Once thos packages have been installed lets next register the service in our StartUp file. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.40.20%20PM.png">
+  
+  The next step will be to go ahead and change the data type of our Calculation class's ResultAmount. The things we will be storing in the database will now be an encrypted string so the table's data type needs to be updated to support that. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%208.45.03%20PM.png">
+  
+ The next few steps are luckily pretty simple at this step as we now need to inject the interfaces for the DataProtector and DataProtectionProvider.
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-27%20at%209.02.44%20PM.png">
+  
+  As you can see in the screenshot above we will need to create a new property for the IDataProtector and inject an DataProtectionProvider into the controller's constructor. In the construtor we will set the value of the Protector from the results of the providers CreateProtector function. It's paramter is whats call a [purpose string](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/consumer-apis/purpose-strings?view=aspnetcore-5.0). Last step in the implementation is to then simply make a call to the protector's Protect function. It's input is also a string so I once again used string interperlation our result amount into a string before its protected.
+  
+### Step 7: Refactoring Our Tests
+Before we get too far into updating our tests to cover our changes you may see this error depending on when you follow this guide. 
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%201.02.47%20PM.png">
+  
+I was able to solve the issue when writing the guide by merely increasing the version of the Microsoft.Extensions.Logging.Abstractions nuget package to 6.0.0 but when you read this you may not have that issue at all or you may need to upgrade to a different version altogether. 
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%201.07.16%20PM.png">
+  
+ I felt this was also an important lesson to address in this article as one of the many challenges of software engineering is finding and or dealing with versions of libraries. Good software is ever changing and evolving and versions change often and suddenly for different reasons so be careful of that in your career. You will often find sometimes code will only work with one version but doesn't play nice with another. 
