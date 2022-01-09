@@ -237,5 +237,65 @@ Once thats complete go ahead and attempt to run the web app. You should see a pa
   Ok Ok now is the real UI set up. For this project our UI is going to be built with a mix of C#'s razor syntax and some ES6 Javascript. For those not famaliar Razor syntax can be explained as C# code that is turned into html at run time. It allows for a developer to write dynamic front end code in C#. That being said Javascript is well Javascript. If your building a web application it's going to be very hard to build a system where Javascript won't be apart of it in some way shape or form at least not at the time of writing this guide anyway. 
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2011.06.13%20PM.png">
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2011.07.11%20PM.png">
+
   With our main form set up we should have everything we need to begin creating requests.
   
+  # Part5: Refactoring and Fixing Our Tests
+  
+  So you may have by now noticed that these changes have broken our tests. We introduced 2 major breaking changes by adding the data protectionr provider. One the constructor now takes a 3 argument so we will need to address that because it won't build and also the RunCalculationWillRetun15Percent currently won't run because the result is no longer a number but now an encrypted string. Since our tests are broken however this gives us a prime opportunity to refactor our code in ways that make more sense and not just make the test pass. One of the keypoints of our current system that doesn't make much sense is to have our calculations done in the HomeController. The reason for this is because that controller has a responsibility to handle loading of the home page but while our functionality is currently presented on the Home Page our endpoints have a very specific purpose that isn't functionality needed to load the Home page. To address this we will simply be creating a new controller called the CalculationController.
+ 
+  ### Step 1: TDD
+ If you've never heard of TTD it stands for Test Driven Development. TDD is a design practice of writing Unit tests that won't pass and then writing enough code to make those tests pass. The value this provides is when you follow this thought process you end up writing far less code you need much earlier in your development process but be aware a pure TDD approach can add a lot of time invested in your development cycle. Manage that investment wisely. We're going to next make adjustments to our Test and have them instead of referencing the HomeController reference a CalculationController even though it doesn't exist. 
+  
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.14.47%20PM.png">
+ Go ahead and refactor your code to look something like the above screenshot. You will notice we are also now mocking the protection provider logic as well. The code snippet below will also be how I intend for you to "fix" the RunCalculationWillReturn15Percent test so that it runs but I want you to take time again and really think about this test and what this test is now warning us we aren't testing correctly anymore.
+  
+ ```C#
+  [Test]
+        public async Task RunCalculationWillReturn15Percent()
+        {
+            //Arrange
+            var expected = "cHJvdGV";
+            var controller = new CalculationController(logger, calculationRepository, dataProtectionProvider);
+            var TestCalc = new CalculationRequest { Id = 1, BillAmount = 37.50, TipType = TipType.SitDownRestaurant };
+            //Act
+            var result = await controller.RunCalculationAsync(TestCalc) as ObjectResult;
+            var actual = (Calculation)result.Value;
+            //Assert
+            Assert.IsTrue(actual.ResultAmount.Contains(expected));
+        }
+  ```
+  
+ ### Step 2: Creating Our New Controller
+  
+  The next step is an easy and thats the creation of the new Controller for now however its not doing anything we weren't doing with th HomeController so we are going to be mostly movie code from one place to another. This is another good reason to have unit tests as sometimes you'll have a need to move code but not change any logic but we're humans and sometimes even when moving code we make mistakes so its good to have test to cath if we made mistakes during the move. Go ahead now and right click on the Controllers folder hit add and then New Scaffolding to create our new empty controller.
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.15.18%20PM.png">
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.15.59%20PM.png">
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.16.19%20PM.png">
+  
+Once the scaffold is complete there should be a controller that looks like the below screenshot with only an Index function in it.
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.19.54%20PM.png">
+
+  If everything has indeed been scaffolded correctly then lets copy some code from our HomeController and move it here. 
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.25.31%20PM.png">
+ Feel free to now cut out CalculateTip and RunCalculationAsync function from the HomeController and paste them in the CalculationController. 
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.27.01%20PM.png">
+ You may also know I added another check that our data is correct by adding a condition that will check if our request model has all the data we marked as required and if it doesn't we will return a BadRequest status code of 400. 
+  
+  ### Step 3: Smoke Testing and More Fixes
+  Before we run our tests I want you to go ahead and run the web app and attempt to save a request. After the main page opens right click on your page and select the inspect option. I then want you toselect the network tab and then attempt to save a calculation. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.40.21%20PM.png">
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.41.28%20PM.png">
+  
+  You should see the above behavior from the screenshots where the alert pops we implemented to let us know things went correctly saying there was a success but see in the network tab there was a 404 failure because the endpoint couldn't be found. Now this is an easy enough problem to solve but I wanted to pause here and bring attention to these are problems because its a good reminder of the different levels of error handling we often need to factor into our systems. We moved our RunCalculationAsync to a new controller so it makes complete sense that our front end can't find as we haven't changed that code yet but our alert's code is wrapped around the section that gets executed if a network call is successful but as long as a response is returned then a network call was successful regardless if that response indicates the work we tried to do was successful. The below adjustments will handle both issues but be mindful with your error messaging.
+
+  These Javascript changes will allow for slightly more accurate error message as well as the correct endpoint route.
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.46.23%20PM.png">
+ 
+  You may still notice that the request will fail however. 
+  
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.46.46%20PM.png">
+  
+  That's because we didn't tell the new controller to actually respond to request at that route which we will address next by adding the route annotation above our controller to let it know to use its controller name as apart of its network request routes. Once all that is in place we should be able to save responses again under our new controller and all our unit tests should be able to run as well. 
+ <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.47.47%20PM.png">
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%201.52.59%20PM.png">
