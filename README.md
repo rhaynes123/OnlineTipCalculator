@@ -1,6 +1,11 @@
 # Building OnlineTipCalculator With ASP.NET Core using C# and Vanilla Javascript
 ### Goal
 The goal of this tutorial is to attempt to walk programmers through the process of building a simple web app however unlike many other tutorials this is targeted at doing its best to implement a number of practical technique and libraries. To achieve that goal this article will walk a programmer through building a MVC(Model-View-Controller) style C# backend. It will also walkthough using the repository patten as well as unit tests for the controller endpoints. The front end will also be built with a mix of vanilla Javascript taking advantage of the Fetch API to hit the endpoints as well as mixing Razor syntax as well. This tutorial has been written with the goal of explaining and detailing out the reasons, purposes and details of its implementation with the goal that developers of any level will be able to follow and add value but specifically the target audience is any developer trying to find a more practical of tools and techniques that go into a full stack ASP.NET Core web application.
+### Requirements
+These will act as our business requirements for what this application will need and do. They will act as our main driving force for most of this guide. 
+```
+" Tip Calculator needs to present to a user a calculated result that is 15 % of a bill"
+```
 # Part 1: Solution Creation and Set Up
 The IDE used in this tutorial was Visual Studio For Mac. For the sake of time we're going to avoid going into detail about how to create a project in VS For Mac but if you do need assistance here's a [link](https://docs.microsoft.com/en-us/visualstudio/mac/tutorial-aspnet-core-vsmac-getting-started?view=vsmac-2019) to Microsofts tutorials on making projects with VS For Mac. The one required step I will go over in creating the code is to ensure that you select the "Individual Authentication (in-app) of the Authentication section. <img src="OnlineTipCalculator/Images/Screen%20Shot%202022-01-04%20at%209.27.25%20PM.png"> Please note that while in this tutorial my IDE of choice was VS For Mac you are more than welcome to use a different IDE that you are comfortable with.
 
@@ -169,6 +174,7 @@ You can observe online 23 one of the main things the Moq library provides us whi
  Now we get into the real reason this is the hardest section actually. Our requirements for our application are about to change! We get and emergency email from out stakeholders telling us that because of "article 53 of the United State Financial Regulartory Bureau and company that is responsible for any calculations of any sales done by a customer must not be shared and or exposed outside said company. This data must be treated as personaly identifiable information  no different than a social security number as malicious entities can use this data to sell to other parties the spending habit of US citizens"(I 100% made this up but I wouldn't be surprised if you ask a team mate with 5 or more years of experience they will have had to deal with some government rule that sounds like this). Long story short we need to encrypt our calculation results so hackers don't get them.
 
 This situation is the exact reason I feel it is very important to try to get your unit tests done very quickly in your development cycle. In the real word requirements change quickly and very very often. It's extremely unfair and there are many many processes in information technology to prevent this as much as possible but it is something that is not likely to even be truly avoided. Any customer or stakeholder of your application will have a very different mindset of what is reasonable to ask of you and how long things may take. Many of them aren't able to understand the difficulty and time it takes to achieve tasks others honestly simply do not care because they are in some way shape or form paying you for a service and even if they forget to tell you the full requirements they are often still part of the service. Sometimes you can push back on late requirements and fix them at more appropriate times but with something like governement and or security regulations you need to act quickly. Having test that we can run regularly on establish functionality means we are far less likely to break parts of our code we had working accidently in an effort to make adjustments to support new requirements. I personally like to view my software as a living being and every living being needs some type of immune system, some internal mechanism that can protect your inner workings against outside threats.Am I comparing requirement changes to viruses? Yes yes I am you work as long as I have you might too :) 
+  
   ### Step 6: Adding Encryption
  
 So next step in our guide, now that our requirements have changed will be to add the [DataProtection](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/using-data-protection?view=aspnetcore-5.0) nuget packages that will help us secure out data. Please note that security is an ever changing topic especially for software. There are many tools that exist to secure software you should always do research before implementing any technology for that person. Getting that out the way open the Nuget package manager and search for DataProtection. For this guide we will be using Microsoft.AspNetCore.DataProtection and Microsoft.AspNetCore.DataProtection.Abstractions.
@@ -186,11 +192,50 @@ So next step in our guide, now that our requirements have changed will be to add
   
   As you can see in the screenshot above we will need to create a new property for the IDataProtector and inject an DataProtectionProvider into the controller's constructor. In the construtor we will set the value of the Protector from the results of the providers CreateProtector function. It's paramter is whats call a [purpose string](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/consumer-apis/purpose-strings?view=aspnetcore-5.0). Last step in the implementation is to then simply make a call to the protector's Protect function. It's input is also a string so I once again used string interperlation our result amount into a string before its protected.
   
-### Step 7: Refactoring Our Tests
-Before we get too far into updating our tests to cover our changes you may see this error depending on when you follow this guide. 
+### Step 7: Asking Question
+
+Asking Question? Why is the section called that? A very important hard lesson when coding up any project for someone is to attempt to use common sense but also take the time to review what you've been asked and find gaps in the literal requests. It's an extremely valuable thought process to begin to read in-between the lines when it comes to your requirements and ask questions. I added this step directly after the requirements where changed because that's a good indication that your customer is unreliable enough that you need to be more aggressive in creating open dialog with them. A very useful question for example to now ask your stakeholder is this "Do you wish for the users to be able to see their previous results?". You then write up an email and send that to your stakeholder and they respond back with an email that reads
+  ```
+  "Well of course I do. I thought that was clear in the original email"
+  ```
+  So now we have a new requirement which is, we also need to present our historical results to a user which means we also need to keep track of users. At this point you can write up an email explaining this wasn't clear enough so you didn't build it in such a way but you'll get working on that. Now here's another moment where I'd like you to take a pause and think through this scenario but not as a developer but as a follower of a lesson. Did it at any point to you as a reader of this guide wonder if it would have made more sense to keep track of your users? If you didn't trust me thats ok I promise you as most tutorials are very simple and straightforward so readers often follow them word for word. Most writers of a guide also expect that. They expect that a reader will follow along word for word. Again there is nothing wrong this but the real world is messy and I'd like to challenge you to begin to think of ways to improve any code your writing rather that be for a guide or for a production system. Take a few minutes of pause to review that thought, maybe write it down for later review so as to not derail any progress too much but try to predict some pitfalls you may have with your system early. These maybe pitfalls that make it harder for your to write code or pitfalls that make it harder for your end users to use your system. Thinking of things that may go wrong and trying to prevent them as much as reasonably possible is a great skill to have in ones tool built in any profession. Ok soapbox time is over lets get back to the typey typey.
+  
+ ### Step 8: Tracking Users
+ Now you don't have to worry too much in this case I promise. Being that this is just a guide I'm not trying to drive any one crazy and make re-write your code over and over too much (your customers will handle that part for me :smirk: ). If you followed the first steps of the tutorial and had the (in-app authorization) drop down selected then this solution has been pre-installed a Microsoft library called [IdentityCore](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-5.0&tabs=visual-studio) which is built for managing users. With that part out of the way what we will need to do is add 2 new fields to our calculations. One for tracking the userId and the other a datetime of the calculation occuring. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2012.46.49%20PM.png">
+  
+  We will also make a change to our Request object as well. Here we will once again take pause and review. If you look at the Request it's still sending the bill amount as a double and not a string. We're going to leave this as is because the input should still be a NUMBER. Leaving the request object using the most appropriate data type will prevent the need from having to implement any unecessary checking to make sure the data is in the right format.
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2012.47.09%20PM.png">
+  
+  Before we go any further into updating our solution you may see this error depending on when you follow this guide. 
  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%201.02.47%20PM.png">
   
 I was able to solve the issue when writing the guide by merely increasing the version of the Microsoft.Extensions.Logging.Abstractions nuget package to 6.0.0 but when you read this you may not have that issue at all or you may need to upgrade to a different version altogether. 
  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%201.07.16%20PM.png">
   
  I felt this was also an important lesson to address in this article as one of the many challenges of software engineering is finding and or dealing with versions of libraries. Good software is ever changing and evolving and versions change often and suddenly for different reasons so be careful of that in your career. You will often find sometimes code will only work with one version but doesn't play nice with another. 
+
+  If there are no issues building your solution I want you to go ahead and create a new migration by running the below command.
+  ```
+  dotnet ef migrations add EncryptingResultAndAddingNewFields
+  ```
+  Since earlier in the project we set up the migration function in the StartUp file we can create the script but don't need to update the database manually as the next run of the application will handle that part.
+  
+# Part 4: Hooking Up Our UI
+
+  
+ ### Step 1: Applying Authorization
+ I know I know I said this part was about hooking up our UI and it is I promise but a critical step before building our user interface is making sure our users are logged in before they even use our features. An easy way to handle that in Asp.NetCore is to add an Authorize attribute around a controller.
+  
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%209.17.41%20PM.png">
+Once thats complete go ahead and attempt to run the web app. You should see a page like the below screenshot that will require you to log in. 
+<img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%209.18.32%20PM.png">
+  
+ If you haven't already go ahead and press the "Register as a new user" link to create a new account and then log in.
+ ### Step 2: Creating Our Input Fields and JavaScript Ajax Calls
+  
+  Ok Ok now is the real UI set up. For this project our UI is going to be built with a mix of C#'s razor syntax and some ES6 Javascript. For those not famaliar Razor syntax can be explained as C# code that is turned into html at run time. It allows for a developer to write dynamic front end code in C#. That being said Javascript is well Javascript. If your building a web application it's going to be very hard to build a system where Javascript won't be apart of it in some way shape or form at least not at the time of writing this guide anyway. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2011.06.13%20PM.png">
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-28%20at%2011.07.11%20PM.png">
+  With our main form set up we should have everything we need to begin creating requests.
+  
