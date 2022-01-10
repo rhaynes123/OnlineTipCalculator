@@ -335,3 +335,8 @@ Something a bit better is to use a library dedicated to the work of making the c
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%2011.17.02%20PM.png">
    
   ### Step 4: Creating Our UI
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.28.18%20PM.png">
+   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.28.18%20PM.png">
+   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.29.35%20PM.png">
+   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.30.14%20PM.png">
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.34.12%20PM.png">
