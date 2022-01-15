@@ -330,13 +330,98 @@ Once the scaffold is complete there should be a controller that looks like the b
 Something a bit better is to use a library dedicated to the work of making the calculations.
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%204.03.16%20PM.png">
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%204.05.10%20PM.png">
+  Once the library file exists feel free to cut the code from our controller that was responsible for the tips results and then paste those into the library. This will allow the  tip's calculation logic to be isolated from the encryption logic and this will now allow us to test that logic indepentitly of anything else.
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%204.15.20%20PM.png">
+  
+  Once that is in place lets go ahead and as we did before make a test project for our library project. A good rule of thumb is to always have one specific test project for each project that is doing some form of business logic. This helps again to respect the concept of single responsibility.
+Make sure that you also remember to create a reference the project that is going to be under test. In this case it will be the TipLibrary.
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%204.08.25%20PM.png">
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%2011.14.12%20PM.png">
+  
+  And now that our library has its own tests we can rename the test that was getting the controllers results to something more fitting. We don't want to remove it because we do indeed want to confirm its doing what its doing right now so just renaming the existing test is perfectly reasonable. Go ahead and change the tests name so it matches the below screenshot.
   <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-29%20at%2011.17.02%20PM.png">
    
-  ### Step 4: Creating Our UI
-  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.28.18%20PM.png">
+  ### Step 4: Creating Our History UI 
+  So our next step will be to create our actual History UI to show a users past results. To get ourselves started we are going to create a new folder under our Views folder called Calculations. Next right click and create a new index razor page like the below screenshot.
    <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.28.18%20PM.png">
+  ```c#
+  @*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{ ViewData["Title"] = "History"; }
+
+<h1>History</h1>
+<div class="text-center">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Tip Amount</th>
+                <th>Date and Time</th>
+            </tr>
+        </thead>
+        <tbody id="calchistory"></tbody>
+    </table>
+
+</div>
+
+<input type="hidden" id="UserId" value="@UserManager.GetUserId(User)" />
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        let userId = document.getElementById("UserId").value;
+        fetch('https://localhost:5001/calculation/history', {
+            method: 'post',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(userId)
+        })
+            .then(response => {
+                if (response.status !== 200) {
+                    alert("Data Not gathered");
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayCalculations(data);
+            })
+            .catch(error => {
+                console.log(error);
+                alert("Data Not gathered");
+            })
+        function displayCalculations(calcs) {
+            let table = '';
+            calcs.forEach(calc => {
+                table = table + `<tr>`;
+                table = table + `<td>${calc.id}</td>`;
+                table = table + `<td>$${calc.resultAmount}</td>`;
+                table = table + `<td>${calc.createdDateTime}</td>`;
+                table += `</tr>`;
+            });
+            document.getElementById("calchistory").innerHTML = table;
+        }
+    </script>
+}
+
+  ```
+  Once thats done we are going to update our layout file a bit to allow us to see a link for the new view we just created. 
+    <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.34.12%20PM.png">
+  
+  ### Step 5: Refactoring
+  Now that all the heavy lifting is done and we have a good set of unit tests plus our core functionality appears to be working now's a great time to go ahead and start refactoring our code to make it a bit cleaner and more readable.
    <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.29.35%20PM.png">
    <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.30.14%20PM.png">
-  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.34.12%20PM.png">
+  As you can see from the above screenshots the only real changes of note we've added are some better exception handling for our errors so that we can catch and log any errors we get as well as return custom errors. We never want our user interface to display internal error messages as this is a secuirty risk and can expose a lot of information about our systems to malcious users and hackers. We are also updating our RunCalculationAsync endpoint to return a CreatedAtAction instead of an Ok. The reason for this change is that it will return a 201 status which is meant to reflect some form of data was created as a result of the network call which is more accurate to what is occuring in this workflow. Since the return type is changing we do need to make an update to our unit test for this method as well. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.32.29%20PM.png">
+  
+  Lastly since our return status is different that should be reflected in our error message check as well. 
+  <img src="OnlineTipCalculator/Images/Screen%20Shot%202021-12-30%20at%2010.35.28%20PM.png">
+
+# Closing Statements
+  
+  So hopefully you were able to follow along with this tutorial and stuck with me to the very end. As we wrap I want to stress as much as possible while I hope you follow some of the standards and guidelines I've mentioned please keep in mind that all software is as much like a living being as any human and while we all have a certain number of traits we share each of the traits can differ either slightly or wildly. No one technique or pattern is the magic bullet to solve all a developers problems. For that reason business level applications are usually made up of various programming languages, libraries, databases, design patterns etc. You will never know them all and nor are you expected too.
